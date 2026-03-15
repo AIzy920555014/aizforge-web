@@ -114,8 +114,8 @@ export default {
     small: '小'
   },
   login: {
-    welcome: '欢迎使用本系统',
-    message: '开箱即用的中后台管理系统',
+    welcome: '欢迎使用 AizForge',
+    message: '面向交付项目与 AI 集成的业务底座',
     tenantname: '租户名称',
     username: '用户名',
     password: '密码',
