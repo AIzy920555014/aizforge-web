@@ -205,6 +205,16 @@ const remainingRouter: AppRouteRecordRaw[] = [
     }
   },
   {
+    path: '/rank-display/:boardCode/:issueNo?',
+    component: () => import('@/views/rank/public/index.vue'),
+    name: 'RankDisplay',
+    meta: {
+      hidden: true,
+      title: '排行榜展示',
+      noTagsView: true
+    }
+  },
+  {
     path: '/403',
     component: () => import('@/views/Error/403.vue'),
     name: 'NoAccess',
