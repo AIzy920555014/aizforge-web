@@ -1,155 +1,157 @@
-# AizForge Web Local Startup Guide
+# AizForge Web 本机启动文档
 
-This document is a step-by-step startup guide for the local frontend project on this Mac.
+这是一份基于你当前这台 Mac 的前端本机启动说明，按步骤操作即可。
 
-Repository path:
+项目目录：
 
 - `/Users/aizy/IdeaProjects/yudao-ui-admin-vue3`
 
-Frontend port:
+前端端口：
 
 - `3001`
 
-Backend dependency:
+依赖的后端地址：
 
 - `http://localhost:48080`
 
-## 1. Load the local environment
+## 1. 先加载本机环境
 
-Open a new terminal and run:
+新开一个终端，先执行：
 
 ```zsh
 source /Users/aizy/.local/share/java-mysql/env.zsh
 ```
 
-Verify Node and pnpm:
+然后检查 Node 和 pnpm：
 
 ```zsh
 node -v
 pnpm -v
 ```
 
-If either command fails, stop and fix the environment first.
+如果这两个命令有报错，先修环境，再继续。
 
-## 2. Confirm the local frontend config
+## 2. 检查本地前端配置
 
-The local mode file is:
+本地开发使用的配置文件是：
 
 - `/Users/aizy/IdeaProjects/yudao-ui-admin-vue3/.env.local`
 
-Current key values:
+当前关键配置如下：
 
-- `VITE_PORT=3001`
-- `VITE_BASE_URL='http://localhost:48080'`
-- `VITE_API_URL=/admin-api`
-- local captcha disabled
+- 本地端口：`3001`
+- 后端地址：`http://localhost:48080`
+- 接口前缀：`/admin-api`
+- 验证码：本地已关闭
 
-The shared `.env` also contains the current branding values:
+另外共享配置文件 `.env` 里已经改成了当前品牌信息：
 
-- app title: `AizForge Console`
+- 系统名称：`AizForge Console`
 
-## 3. Confirm the backend is already running
+## 3. 先确认后端已经启动
 
-This frontend depends on the backend from `aizforge-core`.
+这个前端依赖 `aizforge-core` 后端。
 
-Quick check:
+检查命令：
 
 ```zsh
 curl -I http://127.0.0.1:48080
 ```
 
-If the backend is not running, start it first using:
+如果后端没起来，请先按下面这份文档启动后端：
 
 - `/Users/aizy/IdeaProjects/ruoyi-vue-pro/LOCAL_STARTUP.md`
 
-## 4. Install dependencies
+## 4. 安装依赖
 
-From the repository root:
+进入项目目录执行：
 
 ```zsh
 cd /Users/aizy/IdeaProjects/yudao-ui-admin-vue3
 pnpm install
 ```
 
-If dependencies are already installed, you can still run the command safely.
+如果你之前已经装过依赖，这条也可以重复执行，不影响使用。
 
-## 5. Start the frontend
+## 5. 启动前端
 
-Use the local mode command:
+执行：
 
 ```zsh
 cd /Users/aizy/IdeaProjects/yudao-ui-admin-vue3
 pnpm dev --host 0.0.0.0
 ```
 
-Important note:
+说明：
 
-- the package script `pnpm dev` already uses `env.local`
-- `--host 0.0.0.0` makes local network access easier and is safe for your local dev use
+- 这个仓库的 `pnpm dev` 已经对应本地模式
+- `--host 0.0.0.0` 便于本机和局域网访问，本地开发没问题
 
-## 6. Verify startup
+## 6. 验证是否启动成功
 
-Open the browser:
+浏览器打开：
 
 - `http://localhost:3001`
 
-Expected behavior:
+正常情况下：
 
-- the login page opens
-- title shows `AizForge Console`
-- login page resource links point to your AizForge repositories
+- 登录页可以打开
+- 页面标题显示 `AizForge Console`
+- 登录页底部资源链接已经是你的 AizForge 仓库
 
-If the backend is also healthy, you can log in with:
+如果后端也正常，你可以直接登录：
 
-- tenant: `芋道源码`
-- username: `admin`
-- password: `admin123`
+- 租户：`芋道源码`
+- 用户名：`admin`
+- 密码：`admin123`
 
-## 7. Recommended daily startup order
+## 7. 日常启动顺序建议
+
+以后本机开发建议按这个顺序来：
 
 1. `source /Users/aizy/.local/share/java-mysql/env.zsh`
-2. start MySQL and Redis if needed
-3. start `aizforge-core`
-4. start `aizforge-web`
-5. open `http://localhost:3001`
+2. 启动 MySQL 和 Redis
+3. 启动后端 `aizforge-core`
+4. 启动前端 `aizforge-web`
+5. 打开 `http://localhost:3001`
 
-## 8. Stop the frontend
+## 8. 如何停止前端
 
-If it is running in the current terminal:
+如果前端正在当前终端运行：
 
-- press `Ctrl + C`
+- 直接按 `Ctrl + C`
 
-If you need to kill it by port:
+如果你想按端口停止：
 
 ```zsh
 lsof -tiTCP:3001 -sTCP:LISTEN | xargs kill
 ```
 
-## 9. Common problems
+## 9. 常见问题
 
-### Problem: port `3001` is already in use
+### 问题 1：`3001` 端口被占用
 
-Check:
+执行：
 
 ```zsh
 lsof -iTCP:3001 -sTCP:LISTEN
 ```
 
-Stop the old process, then restart the frontend.
+先停掉旧进程，再重新启动前端。
 
-### Problem: page opens but API requests fail
+### 问题 2：页面能打开，但接口请求失败
 
-Check the backend first:
+先检查后端：
 
 ```zsh
 curl -I http://127.0.0.1:48080
 ```
 
-If this fails, the frontend cannot function correctly.
+如果后端没起来，前端一定会报错。
 
-### Problem: dependencies are broken
+### 问题 3：依赖坏了
 
-Try:
+可以重新安装：
 
 ```zsh
 cd /Users/aizy/IdeaProjects/yudao-ui-admin-vue3
@@ -157,25 +159,25 @@ rm -rf node_modules
 pnpm install
 ```
 
-### Problem: the local config is not taking effect
+### 问题 4：本地配置没生效
 
-The current startup command must be:
+确保你启动时用的是：
 
 ```zsh
 pnpm dev
 ```
 
-This repository maps `dev` to local mode.
+这个仓库里 `dev` 就是本地模式。
 
-### Problem: TypeScript checks are slow or appear to hang
+### 问题 5：类型检查很慢
 
-You can still start the dev server first:
+可以先直接起开发服务：
 
 ```zsh
 pnpm dev --host 0.0.0.0
 ```
 
-Then run checks separately later if needed:
+后面有空再单独检查：
 
 ```zsh
 pnpm ts:check
